@@ -5,3 +5,6 @@
 * $ ./bootstrap.sh
 * $ ./configure
 * $ make
+
+* go back to cs244-verus folder
+* python run_experiment.py
