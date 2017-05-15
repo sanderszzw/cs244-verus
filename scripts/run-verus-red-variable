@@ -10,7 +10,7 @@ if ( $receiver_pid < 0 ) {
   die qq{$!};
 } elsif ( $receiver_pid == 0 ) {
   # child
-  exec q{/home/ubuntu/PA3/verus/src/verus_server -name test -p 60001 -t 1000} or die qq{$!};
+  exec q{/home/sanders/cs244/cs244-verus/verus/src/verus_server -name test -p 60001 -t 1000} or die qq{$!};
 }
 
 chomp( my $prefix = qx{dirname `which mm-link`} );
@@ -23,16 +23,16 @@ if ( defined $ENV{ 'DISPLAY' } ) {
     push @command, qw{--meter-downlink --meter-downlink-delay};
 }
 
-push @command, qw{ --uplink-queue=red --downlink-queue=red --uplink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --downlink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --once --downlink-log=/home/ubuntu/PA3/logs/verus_var_log -- sh -c};
+push @command, qw{ --uplink-queue=red --downlink-queue=red --uplink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --downlink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --once --downlink-log=/home/sanders/cs244/cs244-verus/logs/verus_var_log -- sh -c};
 
-push @command, q{/home/ubuntu/PA3/verus/src/verus_client $MAHIMAHI_BASE -p 60001};
+push @command, q{/home/sanders/cs244/cs244-verus/verus/src/verus_client $MAHIMAHI_BASE -p 60001};
 
 # Reverse links for verus since sender is outside MAHIMAHI
 die unless $command[ 3 ] eq "UPLINK";
-$command[ 3 ] = qq{/home/ubuntu/PA3/synthetic_traces/random_2_20.up};
+$command[ 3 ] = qq{/home/sanders/cs244/cs244-verus/synthetic_traces/random_2_20.up};
 
 die unless $command[ 4 ] eq "DOWNLINK";
-$command[ 4 ] = qq{/home/ubuntu/PA3/synthetic_traces/random_2_20.up};
+$command[ 4 ] = qq{/home/sanders/cs244/cs244-verus/synthetic_traces/random_2_20.up};
 
 system @command;
 
@@ -42,6 +42,6 @@ kill 'INT', $receiver_pid;
 print "\n";
 
 # analyze performance locally
-system q{mm-throughput-graph 500 /home/ubuntu/PA3/logs/verus_var_log > /dev/null};
+system q{mm-throughput-graph 500 /home/sanders/cs244/cs244-verus/logs/verus_var_log > /dev/null};
 
 print "\n";

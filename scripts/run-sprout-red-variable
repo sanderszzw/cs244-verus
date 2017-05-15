@@ -4,7 +4,7 @@ use strict;
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
-$ENV{'SPROUT_MODEL_IN'} = '/home/ubuntu/PA3/alfalfa/src/examples/sprout.model';
+$ENV{'SPROUT_MODEL_IN'} = '/home/sanders/cs244/cs244-verus/alfalfa/src/examples/sprout.model';
 
 my $receiver_pid = fork;
 
@@ -12,7 +12,7 @@ if ( $receiver_pid < 0 ) {
   die qq{$!};
 } elsif ( $receiver_pid == 0 ) {
   # child
-  exec q{/home/ubuntu/PA3/alfalfa/src/examples/sproutbt2} or die qq{$!};
+  exec q{/home/sanders/cs244/cs244-verus/alfalfa/src/examples/sproutbt2} or die qq{$!};
 }
 
 chomp( my $prefix = qx{dirname `which mm-link`} );
@@ -26,15 +26,15 @@ if ( defined $ENV{ 'DISPLAY' } ) {
     push @command, qw{--meter-uplink --meter-uplink-delay};
 }
 
-push @command, qw{ --uplink-queue=red --downlink-queue=red --uplink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --downlink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --once --uplink-log=/home/ubuntu/PA3/logs/sprout_var_log -- sh -c};
+push @command, qw{ --uplink-queue=red --downlink-queue=red --uplink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --downlink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --once --uplink-log=/home/sanders/cs244/cs244-verus/logs/sprout_var_log -- sh -c};
 
-push @command, q{/home/ubuntu/PA3/alfalfa/src/examples/sproutbt2 $MAHIMAHI_BASE 60001};
+push @command, q{/home/sanders/cs244/cs244-verus/alfalfa/src/examples/sproutbt2 $MAHIMAHI_BASE 60001};
 
 die unless $command[ 3 ] eq "UPLINK";
-$command[ 3 ] = qq{/home/ubuntu/PA3/synthetic_traces/random_2_20.up};
+$command[ 3 ] = qq{/home/sanders/cs244/cs244-verus/synthetic_traces/random_2_20.up};
 
 die unless $command[ 4 ] eq "DOWNLINK";
-$command[ 4 ] = qq{/home/ubuntu/PA3/synthetic_traces/random_2_20.up};
+$command[ 4 ] = qq{/home/sanders/cs244/cs244-verus/synthetic_traces/random_2_20.up};
 
 system @command;
 
@@ -44,6 +44,6 @@ kill 'INT', $receiver_pid;
 print "\n";
 
 # analyze performance locally
-system q{mm-throughput-graph 500 /home/ubuntu/PA3/logs/sprout_var_log > /dev/null};
+system q{mm-throughput-graph 500 /home/sanders/cs244/cs244-verus/logs/sprout_var_log > /dev/null};
 
 print "\n";
