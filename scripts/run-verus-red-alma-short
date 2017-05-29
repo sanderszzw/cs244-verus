@@ -10,7 +10,7 @@ if ( $receiver_pid < 0 ) {
   die qq{$!};
 } elsif ( $receiver_pid == 0 ) {
   # child
-  exec q{/home/sanders/cs244/cs244-verus/verus/src/verus_server -name test -p 60001 -t 1000} or die qq{$!};
+  exec q{/home/verus/cs244-verus/verus/src/verus_server -name test -p 60001 -t 1000} or die qq{$!};
 }
 
 chomp( my $prefix = qx{dirname `which mm-link`} );
@@ -23,9 +23,9 @@ if ( defined $ENV{ 'DISPLAY' } ) {
     push @command, qw{--meter-downlink --meter-downlink-delay};
 }
 
-push @command, qw{ --uplink-queue=red --downlink-queue=red --uplink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --downlink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --once --downlink-log=/home/sanders/cs244/cs244-verus/logs/verus_alma_short_log -- sh -c};
+push @command, qw{ --uplink-queue=red --downlink-queue=red --uplink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --downlink-queue-args=min_bytes=375000max_bytes=1125000drop_percentage=10 --once --downlink-log=/home/verus/cs244-verus/logs/verus_alma_short_log -- sh -c};
 
-push @command, q{/home/sanders/cs244/cs244-verus/verus/src/verus_client $MAHIMAHI_BASE -p 60001};
+push @command, q{/home/verus/cs244-verus/verus/src/verus_client $MAHIMAHI_BASE -p 60001};
 
 # Reverse links for verus since sender is outside MAHIMAHI
 die unless $command[ 3 ] eq "UPLINK";
@@ -42,6 +42,6 @@ kill 'INT', $receiver_pid;
 print "\n";
 
 # analyze performance locally
-system q{mm-throughput-graph 500 /home/sanders/cs244/cs244-verus/logs/verus_alma_short_log > /dev/null};
+system q{mm-throughput-graph 500 /home/verus/cs244-verus/logs/verus_alma_short_log > /dev/null};
 
 print "\n";
