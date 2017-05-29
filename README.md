@@ -12,7 +12,7 @@ http://alfalfa.mit.edu/#code
  
 Compile mahimahi
   * cd mahimahi
-  * ./bootstrap.sh
+  * ./autogen.sh
   * ./configure
   * make
   * sudo make install
