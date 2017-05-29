@@ -26,4 +26,5 @@ Compile Verus
 Run Experiments:
   * sudo sysctl -w net.ipv4.ip_forward=1
   * cd cs244-verus
+  * ./cleanup_results.sh 
   * python run_experiment.py
