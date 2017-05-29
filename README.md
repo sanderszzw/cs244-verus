@@ -24,5 +24,6 @@ Compile Verus
   * make
 
 Run Experiments:
+  * sudo sysctl -w net.ipv4.ip_forward=1
   * cd cs244-verus
   * python run_experiment.py
