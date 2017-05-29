@@ -1,7 +1,7 @@
 # cs244-verus
 
 dependencies:
-$ sudo apt-get install build-essential autoconf libasio-dev libalglib-dev libboost-system-dev libprotobuf-dev protobuf-compiler libtinfo-dev libtool apache2-dev libxcb-present-dev libcogl-pango-dev libtbb-dev 
+$ sudo apt-get install build-essential autoconf libasio-dev libalglib-dev libboost-system-dev libprotobuf-dev protobuf-compiler libtinfo-dev libtool apache2-dev libxcb-present-dev libcogl-pango-dev libtbb-dev apache2
 
 Compile Sprout:
 http://alfalfa.mit.edu/#code
