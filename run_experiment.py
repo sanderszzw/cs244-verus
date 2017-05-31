@@ -25,16 +25,16 @@ if __name__ == "__main__":
 	os.system("mm-delay-graph ./logs/verus_var_log > ./results/verus_var_delay.html")
 	print("Finished running the second test!")
 
-	os.system(RUN_SPROUT_ALMA_SHORT)
-	os.system("mm-throughput-graph 500 ./logs/sprout_alma_short_log > ./results/sprout_alma_throughput.html")
-	os.system("mm-delay-graph ./logs/sprout_alma_short_log > ./results/sprout_alma_delay.html")
-	print("Finished running the third test!")
+	# os.system(RUN_SPROUT_ALMA_SHORT)
+	# os.system("mm-throughput-graph 500 ./logs/sprout_alma_short_log > ./results/sprout_alma_throughput.html")
+	# os.system("mm-delay-graph ./logs/sprout_alma_short_log > ./results/sprout_alma_delay.html")
+	# print("Finished running the third test!")
 
-	os.system(RUN_SPROUT_VAR)
-	os.system("mm-throughput-graph 500 ./logs/sprout_var_log > ./results/sprout_var_throughput.html")
-	os.system("mm-delay-graph ./logs/sprout_var_log > ./results/sprout_var_delay.html")
-	print("Finished running the fourth test!")
+	# os.system(RUN_SPROUT_VAR)
+	# os.system("mm-throughput-graph 500 ./logs/sprout_var_log > ./results/sprout_var_throughput.html")
+	# os.system("mm-delay-graph ./logs/sprout_var_log > ./results/sprout_var_delay.html")
+	# print("Finished running the fourth test!")
 
-        os.system("./plot_scripts/mm-throughput-comp-graph 500 ./logs/sprout_var_log ./logs/verus_var_log > ./results/var_throughput_comp.html")
+ #        os.system("./plot_scripts/mm-throughput-comp-graph 500 ./logs/sprout_var_log ./logs/verus_var_log > ./results/var_throughput_comp.html")
 
 	print("Finished! Look in the results directory to find the html files to download and view.")
