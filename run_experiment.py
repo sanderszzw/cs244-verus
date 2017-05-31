@@ -15,15 +15,20 @@ if __name__ == "__main__":
 	os.system("mkdir logs")
 	os.system("mkdir results")
 
-	os.system(RUN_VERUS_ALMA_SHORT)
-	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/verus_alma_short_log > ./results/verus_alma_throughput.html")
-	os.system("mm-delay-graph ./logs/verus_alma_short_log > ./results/verus_alma_delay.html")
-	print("Finished running the first test!")
+	# os.system(RUN_VERUS_ALMA_SHORT)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/verus_alma_short_log > ./results/verus_alma_throughput.html")
+	# os.system("mm-delay-graph ./logs/verus_alma_short_log > ./results/verus_alma_delay.html")
+	# print("Finished running the first test!")
 
 	os.system(RUN_VERUS_VAR)
 	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/verus_var_log > ./results/verus_var_throughput.html")
 	os.system("mm-delay-graph ./logs/verus_var_log > ./results/verus_var_delay.html")
 	print("Finished running the second test!")
+
+	# os.system("scripts/run-verus-red-original-campus-pedestrian")
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/verus_original_campus_pedestrian_log > ./results/verus_original_campus_pedestrian_throughput.html")
+	# os.system("mm-delay-graph ./logs/verus_original_campus_pedestrian_log > ./results/verus_original_campus_pedestrian_delay.html")
+	# print("Finished running the second test!")
 
 	# os.system(RUN_SPROUT_ALMA_SHORT)
 	# os.system("mm-throughput-graph 500 ./logs/sprout_alma_short_log > ./results/sprout_alma_throughput.html")
