@@ -34,32 +34,32 @@ if __name__ == "__main__":
 
 	############################
 
-	# os.system(CITY_DRIVE_SCRIPT_R2)
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r2 > ./results/city-drive-throughput-r2.tml")
-	# os.system("mm-delay-graph ./logs/city_drive_log_r2 > ./results/city-drive-delay-r2.html")
+	os.system(CITY_DRIVE_SCRIPT_R2)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r2 > ./results/city-drive-throughput-r2.tml")
+	os.system("mm-delay-graph ./logs/city_drive_log_r2 > ./results/city-drive-delay-r2.html")
 
-	# os.system(CITY_DRIVE_SCRIPT_R4)
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r4 > ./results/city-drive-throughput-r4.tml")
-	# os.system("mm-delay-graph ./logs/city_drive_log_r4 > ./results/city-drive-delay-r4.html")
+	os.system(CITY_DRIVE_SCRIPT_R4)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r4 > ./results/city-drive-throughput-r4.tml")
+	os.system("mm-delay-graph ./logs/city_drive_log_r4 > ./results/city-drive-delay-r4.html")
 
-	# os.system(CITY_DRIVE_SCRIPT_R6)
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r6 > ./results/city-drive-throughput-r6.tml")
-	# os.system("mm-delay-graph ./logs/city_drive_log_r6 > ./results/city-drive-delay-r6.html")
-	# print("Finished running the city-drive!")
+	os.system(CITY_DRIVE_SCRIPT_R6)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r6 > ./results/city-drive-throughput-r6.tml")
+	os.system("mm-delay-graph ./logs/city_drive_log_r6 > ./results/city-drive-delay-r6.html")
+	print("Finished running the city-drive!")
 
-	# ############################
+	############################
 
-	# os.system(HIGHWAY_DRIVE_SCRIPT_R2)
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r2 > ./results/highway-drive-throughput-r2.tml")
-	# os.system("mm-delay-graph ./logs/highway_drive_log_r2 > ./results/highway-drive-delay-r2.html")
+	os.system(HIGHWAY_DRIVE_SCRIPT_R2)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r2 > ./results/highway-drive-throughput-r2.tml")
+	os.system("mm-delay-graph ./logs/highway_drive_log_r2 > ./results/highway-drive-delay-r2.html")
 
-	# os.system(HIGHWAY_DRIVE_SCRIPT_R4)
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r4 > ./results/highway-drive-throughput-r4.tml")
-	# os.system("mm-delay-graph ./logs/highway_drive_log_r4 > ./results/highway-drive-delay-r4.html")
+	os.system(HIGHWAY_DRIVE_SCRIPT_R4)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r4 > ./results/highway-drive-throughput-r4.tml")
+	os.system("mm-delay-graph ./logs/highway_drive_log_r4 > ./results/highway-drive-delay-r4.html")
 
-	# os.system(HIGHWAY_DRIVE_SCRIPT_R6)
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r6 > ./results/highway-drive-throughput-r6.tml")
-	# os.system("mm-delay-graph ./logs/highway_drive_log_r6 > ./results/highway-drive-delay-r6.html")
-	# print("Finished running the highway-drive!")
+	os.system(HIGHWAY_DRIVE_SCRIPT_R6)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r6 > ./results/highway-drive-throughput-r6.tml")
+	os.system("mm-delay-graph ./logs/highway_drive_log_r6 > ./results/highway-drive-delay-r6.html")
+	print("Finished running the highway-drive!")
 
 	print("Finished! Look in the results directory to find the html files to download and view.")
