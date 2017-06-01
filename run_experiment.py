@@ -6,18 +6,31 @@ if __name__ == "__main__":
 	CAMP_PED_SCRIPT_R2= "scripts/camp-ped-r2"
 	CAMP_PED_SCRIPT_R4= "scripts/camp-ped-r4"
 	CAMP_PED_SCRIPT_R6= "scripts/camp-ped-r6"
+	CAMP_PED_SCRIPT_CUBIC= "scripts/camp-ped-cubic"
+
 	CITY_DRIVE_SCRIPT_R2 = "scripts/city-drive-r2"
 	CITY_DRIVE_SCRIPT_R4 = "scripts/city-drive-r4"
 	CITY_DRIVE_SCRIPT_R6 = "scripts/city-drive-r6"
+	CITY_DRIVE_SCRIPT_CUBIC = "scripts/city-drive-cubic"
+
 	HIGHWAY_DRIVE_SCRIPT_R2 = "scripts/highway-drive-r2"
 	HIGHWAY_DRIVE_SCRIPT_R4 = "scripts/highway-drive-r4"
 	HIGHWAY_DRIVE_SCRIPT_R6 = "scripts/highway-drive-r6"
+	HIGHWAY_DRIVE_SCRIPT_CUBIC = "scripts/highway-drive-cubic"
+
+	TEST = "scripts/test"
 
 	print("Start .........................................")
 	os.system("mkdir logs")
 	os.system("mkdir results")
 
+	# os.system(TEST)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/test_log > ./results/test-throughput.tml")
+	# os.system("mm-delay-graph ./logs/test_log > ./results/test-delay.html")
+	# print("Finished running camp-ped!")
+
 	############################
+
 
 	os.system(CAMP_PED_SCRIPT_R2)
 	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/camp_ped_log_r2 > ./results/camp-ped-throughput-r2.tml")
@@ -30,6 +43,11 @@ if __name__ == "__main__":
 	os.system(CAMP_PED_SCRIPT_R6)
 	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/camp_ped_log_r6 > ./results/camp-ped-throughput-r6.tml")
 	os.system("mm-delay-graph ./logs/camp_ped_log_r6 > ./results/camp-ped-delay-r6.html")
+
+	os.system(CAMP_PED_SCRIPT_CUBIC)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/camp_ped_log_cubic > ./results/camp-ped-throughput-cubic.tml")
+	os.system("mm-delay-graph ./logs/camp_ped_log_cubic > ./results/camp-ped-delay-cubic.html")
+
 	print("Finished running camp-ped!")
 
 	############################
@@ -45,6 +63,11 @@ if __name__ == "__main__":
 	os.system(CITY_DRIVE_SCRIPT_R6)
 	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r6 > ./results/city-drive-throughput-r6.tml")
 	os.system("mm-delay-graph ./logs/city_drive_log_r6 > ./results/city-drive-delay-r6.html")
+
+	os.system(CITY_DRIVE_SCRIPT_CUBIC)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_cubic > ./results/city-drive-throughput-cubic.tml")
+	os.system("mm-delay-graph ./logs/city_drive_log_cubic > ./results/city-drive-delay-cubic.html")
+
 	print("Finished running the city-drive!")
 
 	############################
@@ -60,6 +83,11 @@ if __name__ == "__main__":
 	os.system(HIGHWAY_DRIVE_SCRIPT_R6)
 	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r6 > ./results/highway-drive-throughput-r6.tml")
 	os.system("mm-delay-graph ./logs/highway_drive_log_r6 > ./results/highway-drive-delay-r6.html")
+
+	os.system(HIGHWAY_DRIVE_SCRIPT_CUBIC)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_cubic > ./results/highway-drive-throughput-cubic.tml")
+	os.system("mm-delay-graph ./logs/highway_drive_log_cubic > ./results/highway-drive-delay-cubic.html")
+	
 	print("Finished running the highway-drive!")
 
 	print("Finished! Look in the results directory to find the html files to download and view.")
