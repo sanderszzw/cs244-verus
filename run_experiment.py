@@ -3,43 +3,63 @@ import os
 
 if __name__ == "__main__":
 
-	RUN_VERUS_ALMA_SHORT = "scripts/run-verus-red-alma-short" # verus_alma_short_log
-	RUN_VERUS_VAR = "scripts/run-verus-red-variable" # verus_var_log
+	CAMP_PED_SCRIPT_R2= "scripts/camp-ped-r2"
+	CAMP_PED_SCRIPT_R4= "scripts/camp-ped-r4"
+	CAMP_PED_SCRIPT_R6= "scripts/camp-ped-r6"
+	CITY_DRIVE_SCRIPT_R2 = "scripts/city-drive-r2"
+	CITY_DRIVE_SCRIPT_R4 = "scripts/city-drive-r4"
+	CITY_DRIVE_SCRIPT_R6 = "scripts/city-drive-r6"
+	HIGHWAY_DRIVE_SCRIPT_R2 = "scripts/highway-drive-r2"
+	HIGHWAY_DRIVE_SCRIPT_R4 = "scripts/highway-drive-r4"
+	HIGHWAY_DRIVE_SCRIPT_R6 = "scripts/highway-drive-r6"
 
-	RUN_SPROUT_ALMA_SHORT = "scripts/run-sprout-red-alma-short" # sprout_alma_short_log
-	RUN_SPROUT_VAR = "scripts/run-sprout-red-variable" # sprout_var_log
-
-	print("Welcome to Ryandrew's experiment.")
-	print("This will take a LONG time to run.")
-	print("Feel free to go do whatever for the next 35 minutes or so.")
+	print("Start .........................................")
 	os.system("mkdir logs")
 	os.system("mkdir results")
 
-	os.system(RUN_VERUS_ALMA_SHORT)
-	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/verus_alma_short_log > ./results/verus_alma_throughput.html")
-	os.system("mm-delay-graph ./logs/verus_alma_short_log > ./results/verus_alma_delay.html")
-	print("Finished running the first test!")
+	############################
 
-	# os.system(RUN_VERUS_VAR)
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/verus_var_log > ./results/verus_var_throughput.html")
-	# os.system("mm-delay-graph ./logs/verus_var_log > ./results/verus_var_delay.html")
-	# print("Finished running the second test!")
+	os.system(CAMP_PED_SCRIPT_R2)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/camp_ped_log_r2 > ./results/camp-ped-throughput-r2.tml")
+	os.system("mm-delay-graph ./logs/camp_ped_log_r2 > ./results/camp-ped-delay-r2.html")
 
-	# os.system("scripts/run-verus-red-original-campus-pedestrian")
-	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/verus_original_campus_pedestrian_log > ./results/verus_original_campus_pedestrian_throughput.html")
-	# os.system("mm-delay-graph ./logs/verus_original_campus_pedestrian_log > ./results/verus_original_campus_pedestrian_delay.html")
-	# print("Finished running the second test!")
+	os.system(CAMP_PED_SCRIPT_R4)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/camp_ped_log_r4 > ./results/camp-ped-throughput-r4.tml")
+	os.system("mm-delay-graph ./logs/camp_ped_log_r4 > ./results/camp-ped-delay-r4.html")
 
-	# os.system(RUN_SPROUT_ALMA_SHORT)
-	# os.system("mm-throughput-graph 500 ./logs/sprout_alma_short_log > ./results/sprout_alma_throughput.html")
-	# os.system("mm-delay-graph ./logs/sprout_alma_short_log > ./results/sprout_alma_delay.html")
-	# print("Finished running the third test!")
+	os.system(CAMP_PED_SCRIPT_R6)
+	os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/camp_ped_log_r6 > ./results/camp-ped-throughput-r6.tml")
+	os.system("mm-delay-graph ./logs/camp_ped_log_r6 > ./results/camp-ped-delay-r6.html")
+	print("Finished running camp-ped!")
 
-	# os.system(RUN_SPROUT_VAR)
-	# os.system("mm-throughput-graph 500 ./logs/sprout_var_log > ./results/sprout_var_throughput.html")
-	# os.system("mm-delay-graph ./logs/sprout_var_log > ./results/sprout_var_delay.html")
-	# print("Finished running the fourth test!")
+	############################
 
- #        os.system("./plot_scripts/mm-throughput-comp-graph 500 ./logs/sprout_var_log ./logs/verus_var_log > ./results/var_throughput_comp.html")
+	# os.system(CITY_DRIVE_SCRIPT_R2)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r2 > ./results/city-drive-throughput-r2.tml")
+	# os.system("mm-delay-graph ./logs/city_drive_log_r2 > ./results/city-drive-delay-r2.html")
+
+	# os.system(CITY_DRIVE_SCRIPT_R4)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r4 > ./results/city-drive-throughput-r4.tml")
+	# os.system("mm-delay-graph ./logs/city_drive_log_r4 > ./results/city-drive-delay-r4.html")
+
+	# os.system(CITY_DRIVE_SCRIPT_R6)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/city_drive_log_r6 > ./results/city-drive-throughput-r6.tml")
+	# os.system("mm-delay-graph ./logs/city_drive_log_r6 > ./results/city-drive-delay-r6.html")
+	# print("Finished running the city-drive!")
+
+	# ############################
+
+	# os.system(HIGHWAY_DRIVE_SCRIPT_R2)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r2 > ./results/highway-drive-throughput-r2.tml")
+	# os.system("mm-delay-graph ./logs/highway_drive_log_r2 > ./results/highway-drive-delay-r2.html")
+
+	# os.system(HIGHWAY_DRIVE_SCRIPT_R4)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r4 > ./results/highway-drive-throughput-r4.tml")
+	# os.system("mm-delay-graph ./logs/highway_drive_log_r4 > ./results/highway-drive-delay-r4.html")
+
+	# os.system(HIGHWAY_DRIVE_SCRIPT_R6)
+	# os.system("./plot_scripts/mm-throughput-graph-verus 500 ./logs/highway_drive_log_r6 > ./results/highway-drive-throughput-r6.tml")
+	# os.system("mm-delay-graph ./logs/highway_drive_log_r6 > ./results/highway-drive-delay-r6.html")
+	# print("Finished running the highway-drive!")
 
 	print("Finished! Look in the results directory to find the html files to download and view.")
