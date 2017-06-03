@@ -3,13 +3,6 @@
 dependencies:
 $ sudo apt-get install build-essential autoconf libasio-dev libalglib-dev libboost-system-dev libprotobuf-dev protobuf-compiler libtinfo-dev libtool apache2-dev libxcb-present-dev libcogl-pango-dev libtbb-dev apache2 gnuplot-x11
 
-Compile Sprout:
-http://alfalfa.mit.edu/#code
- * cd alfalfa 
- * ./autogen.sh
- * ./configure --enable-examples
- * make
- 
 Compile mahimahi
   * cd mahimahi
   * ./autogen.sh
