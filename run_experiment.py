@@ -39,82 +39,78 @@ if __name__ == "__main__":
 	os.system("mkdir logs")
 	os.system("mkdir results")
 
-	# os.system(TEST)
-	# os.system("mm-throughput-graph 500 ./logs/test_log > ./results/test-throughput.html")
-	# os.system("mm-delay-graph ./logs/test_log > ./results/test-delay.html")
-	# print("Finished running camp-ped!")
 
 	############################
 
 
-	# os.system(CAMP_PED_SCRIPT_R2)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_r2 CAMP_PED_SCRIPT_R2 > ./results/camp-ped-throughput-r2.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_r2 > ./results/camp-ped-delay-r2.html")
+	os.system(CAMP_PED_SCRIPT_R2)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_r2 CAMP_PED_SCRIPT_R2 > ./results/camp-ped-throughput-r2.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_r2 > ./results/camp-ped-delay-r2.html")
 
-	# os.system(CAMP_PED_SCRIPT_R4)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_r4 CAMP_PED_SCRIPT_R4 > ./results/camp-ped-throughput-r4.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_r4 > ./results/camp-ped-delay-r4.html")
+	os.system(CAMP_PED_SCRIPT_R4)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_r4 CAMP_PED_SCRIPT_R4 > ./results/camp-ped-throughput-r4.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_r4 > ./results/camp-ped-delay-r4.html")
 
-	# os.system(CAMP_PED_SCRIPT_R6)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_r6 CAMP_PED_SCRIPT_R6 > ./results/camp-ped-throughput-r6.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_r6 > ./results/camp-ped-delay-r6.html")
+	os.system(CAMP_PED_SCRIPT_R6)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_r6 CAMP_PED_SCRIPT_R6 > ./results/camp-ped-throughput-r6.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_r6 > ./results/camp-ped-delay-r6.html")
 
-	# os.system(CAMP_PED_SCRIPT_CUBIC)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_cubic CAMP_PED_SCRIPT_CUBIC > ./results/camp-ped-throughput-cubic.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_cubic > ./results/camp-ped-delay-cubic.html")
+	os.system(CAMP_PED_SCRIPT_CUBIC)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/camp_ped_log_cubic CAMP_PED_SCRIPT_CUBIC > ./results/camp-ped-throughput-cubic.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/camp_ped_log_cubic > ./results/camp-ped-delay-cubic.html")
 
-	# print("Finished running camp-ped!")
+	print("Finished running camp-ped!")
 
 	# ############################
 
-	# os.system(CITY_DRIVE_SCRIPT_R2)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_r2 CITY_DRIVE_SCRIPT_R2 > ./results/city-drive-throughput-r2.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_r2 > ./results/city-drive-delay-r2.html")
+	os.system(CITY_DRIVE_SCRIPT_R2)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_r2 CITY_DRIVE_SCRIPT_R2 > ./results/city-drive-throughput-r2.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_r2 > ./results/city-drive-delay-r2.html")
 
-	# os.system(CITY_DRIVE_SCRIPT_R4)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_r4 CITY_DRIVE_SCRIPT_R4 > ./results/city-drive-throughput-r4.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_r4 > ./results/city-drive-delay-r4.html")
+	os.system(CITY_DRIVE_SCRIPT_R4)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_r4 CITY_DRIVE_SCRIPT_R4 > ./results/city-drive-throughput-r4.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_r4 > ./results/city-drive-delay-r4.html")
 
-	# os.system(CITY_DRIVE_SCRIPT_R6)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_r6 CITY_DRIVE_SCRIPT_R6 > ./results/city-drive-throughput-r6.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_r6 > ./results/city-drive-delay-r6.html")
+	os.system(CITY_DRIVE_SCRIPT_R6)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_r6 CITY_DRIVE_SCRIPT_R6 > ./results/city-drive-throughput-r6.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_r6 > ./results/city-drive-delay-r6.html")
 
-	# os.system(CITY_DRIVE_SCRIPT_CUBIC)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_cubic CITY_DRIVE_SCRIPT_CUBIC > ./results/city-drive-throughput-cubic.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_cubic > ./results/city-drive-delay-cubic.html")
+	os.system(CITY_DRIVE_SCRIPT_CUBIC)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/city_drive_log_cubic CITY_DRIVE_SCRIPT_CUBIC > ./results/city-drive-throughput-cubic.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/city_drive_log_cubic > ./results/city-drive-delay-cubic.html")
 
-	# print("Finished running the city-drive!")
+	print("Finished running the city-drive!")
 
 	
 	# ############################
 
-	# os.system(HIGHWAY_DRIVE_SCRIPT_R2)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_r2 HIGHWAY_DRIVE_SCRIPT_R2 > ./results/highway-drive-throughput-r2.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_r2 > ./results/highway-drive-delay-r2.html")
+	os.system(HIGHWAY_DRIVE_SCRIPT_R2)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_r2 HIGHWAY_DRIVE_SCRIPT_R2 > ./results/highway-drive-throughput-r2.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_r2 > ./results/highway-drive-delay-r2.html")
 
-	# os.system(HIGHWAY_DRIVE_SCRIPT_R4)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_r4 HIGHWAY_DRIVE_SCRIPT_R4 > ./results/highway-drive-throughput-r4.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_r4 > ./results/highway-drive-delay-r4.html")
+	os.system(HIGHWAY_DRIVE_SCRIPT_R4)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_r4 HIGHWAY_DRIVE_SCRIPT_R4 > ./results/highway-drive-throughput-r4.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_r4 > ./results/highway-drive-delay-r4.html")
 
-	# os.system(HIGHWAY_DRIVE_SCRIPT_R6)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_r6 HIGHWAY_DRIVE_SCRIPT_R6 > ./results/highway-drive-throughput-r6.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_r6 > ./results/highway-drive-delay-r6.html")
+	os.system(HIGHWAY_DRIVE_SCRIPT_R6)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_r6 HIGHWAY_DRIVE_SCRIPT_R6 > ./results/highway-drive-throughput-r6.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_r6 > ./results/highway-drive-delay-r6.html")
 
-	# os.system(HIGHWAY_DRIVE_SCRIPT_CUBIC)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_cubic HIGHWAY_DRIVE_SCRIPT_CUBIC > ./results/highway-drive-throughput-cubic.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_cubic > ./results/highway-drive-delay-cubic.html")
+	os.system(HIGHWAY_DRIVE_SCRIPT_CUBIC)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/highway_drive_log_cubic HIGHWAY_DRIVE_SCRIPT_CUBIC > ./results/highway-drive-throughput-cubic.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/highway_drive_log_cubic > ./results/highway-drive-delay-cubic.html")
 
-	# print("Finished running the highway-drive!")
+	print("Finished running the highway-drive!")
 
 	############################
 
-	# os.system(ATT_DRIVE_SCRIPT_R2)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/att_drive_r2 ATT_DRIVE_SCRIPT_R2 > ./results/att-drive-throughput-r2.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/att_drive_r2 > ./results/att-drive-delay-r2.html")
+	os.system(ATT_DRIVE_SCRIPT_R2)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/att_drive_r2 ATT_DRIVE_SCRIPT_R2 > ./results/att-drive-throughput-r2.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/att_drive_r2 > ./results/att-drive-delay-r2.html")
 
-	# os.system(ATT_DRIVE_SCRIPT_R4)
-	# os.system("./plot_scripts/mm-throughput-graph 500 ./logs/att_drive_r4 ATT_DRIVE_SCRIPT_R4 > ./results/att-drive-throughput-r4.html")
-	# os.system("./plot_scripts/mm-delay-graph ./logs/att_drive_r4 > ./results/att-drive-delay-r4.html")
+	os.system(ATT_DRIVE_SCRIPT_R4)
+	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/att_drive_r4 ATT_DRIVE_SCRIPT_R4 > ./results/att-drive-throughput-r4.html")
+	os.system("./plot_scripts/mm-delay-graph ./logs/att_drive_r4 > ./results/att-drive-delay-r4.html")
 
 	os.system(ATT_DRIVE_SCRIPT_R6)
 	os.system("./plot_scripts/mm-throughput-graph 500 ./logs/att_drive_r6 ATT_DRIVE_SCRIPT_R6 > ./results/att-drive-throughput-r6.html")
