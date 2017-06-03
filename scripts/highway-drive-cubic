@@ -16,8 +16,6 @@ my @command = qw{mm-delay 20 mm-link UPLINK DOWNLINK --once --downlink-queue=dro
 
 push @command, q{/home/verus/cs244-verus/cubic/client.py 5050 1};
 
-# for the contest, we will send data over Verizon's downlink
-# (datagrump sender's uplink)
 die unless $command[ 3 ] eq "UPLINK";
 $command[ 3 ] = qq{/home/verus/cs244-verus/traces/highway_drive_2min};
 

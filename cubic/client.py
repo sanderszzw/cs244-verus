@@ -22,9 +22,11 @@ TUNER = int(sys.argv[2])
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 if TUNER:
+    print "using cubic"
     s.setsockopt(socket.IPPROTO_TCP, TCP_CONGESTION, 'cubic')
 else:
-    s.setsockopt(socket.IPPROTO_TCP, TCP_CONGESTION, 'cubic')
+    print "using reno"
+    s.setsockopt(socket.IPPROTO_TCP, TCP_CONGESTION, 'reno')
 
 print ADDRESS
 try:
