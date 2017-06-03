@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"  standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg onload="if (typeof(gnuplot_svg)!='undefined') gnuplot_svg.Init(evt)" 
+ width="1024" height="560" 
+ viewBox="0 0 1024 560"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+
+<title>Throughput</title>
+<desc>Produced by GNUPLOT 4.6 patchlevel 6 </desc>
+
+<script language="javaScript" TYPE="text/javascript" > <![CDATA[
+/*
+ * $Id: gnuplot_svg.js,v 1.8.2.2 2014/05/26 22:00:19 sfeam Exp $
+ */
+// Javascript routines for interaction with SVG documents produced by 
+// gnuplot's SVG terminal driver.
+
+var gnuplot_svg = { };
+
+gnuplot_svg.version = "26 May 2014";
+
+gnuplot_svg.SVGDoc = null;
+gnuplot_svg.SVGRoot = null;
+
+gnuplot_svg.Init = function(e)
+{
+   gnuplot_svg.SVGDoc = e.target.ownerDocument;
+   gnuplot_svg.SVGRoot = gnuplot_svg.SVGDoc.documentElement;
+   gnuplot_svg.axisdate = new Date();
+}
+
+gnuplot_svg.toggleVisibility = function(evt, targetId)
+{
+   var newTarget = evt.target;
+   if (targetId)
+      newTarget = gnuplot_svg.SVGDoc.getElementById(targetId);
+
+   var newValue = newTarget.getAttributeNS(null, 'visibility')
+
+   if ('hidden' != newValue)
+      newValue = 'hidden';
+   else
+      newValue = 'visible';
+
+   newTarget.setAttributeNS(null, 'visibility', newValue);
+
+   if (targetId) {
+      newTarget = gnuplot_svg.SVGDoc.getElementById(targetId.concat("_keyentry"));
+      if (newTarget)
+         newTarget.setAttributeNS(null, 'style',
+		newValue == 'hidden' ? 'filter:url(#greybox)' : 'none');
+   }
+
+   evt.preventDefault();
+   evt.stopPropagation();
+}
+
+// Mouse tracking echos coordinates to a floating text box
+
+gnuplot_svg.getText = function() {
+	return(document.getElementById("coord_text"));
+}
+
+gnuplot_svg.updateCoordBox = function(t, evt) {
+    /* 
+     * Apply screen CTM transformation to the evt screenX and screenY to get 
+     * coordinates in SVG coordinate space.  Use scaling parameters stored in
+     * the plot document by gnuplot to convert further into plot coordinates.
+     * Then position the floating text box using the SVG coordinates.
+     */
+    var m = document.documentElement.getScreenCTM();
+    var p = document.documentElement.createSVGPoint(); 
+    p.x = evt.clientX; p.y = evt.clientY; 
+    p = p.matrixTransform(m.inverse()); 
+
+    // Allow for scrollbar position (Firefox, others?)
+    if (typeof evt.pageX != 'undefined') {
+        p.x = evt.pageX; p.y = evt.pageY; 
+    }
+    t.setAttribute("x", p.x);
+    t.setAttribute("y", p.y);
+   
+    plotcoord = gnuplot_svg.mouse2plot(p.x,p.y);
+
+    if (gnuplot_svg.polar_mode) {
+	polar = gnuplot_svg.convert_to_polar(plotcoord.x,plotcoord.y);
+	label_x = "ang= " + polar.ang.toPrecision(4);
+	label_y = "R= " + polar.r.toPrecision(4);
+    } else if (gnuplot_svg.plot_timeaxis_x == "Date") {
+	gnuplot_svg.axisdate.setTime(1000. * (plotcoord.x + 946684800));
+	year = gnuplot_svg.axisdate.getUTCFullYear();
+	month = gnuplot_svg.axisdate.getUTCMonth();
+	date = gnuplot_svg.axisdate.getUTCDate();
+	label_x = (" " + date).slice (-2) + "/"
+		+ ("0" + (month+1)).slice (-2) + "/"
+		+ year;
+	label_y = plotcoord.y.toFixed(2);
+    } else if (gnuplot_svg.plot_timeaxis_x == "Time") {
+	gnuplot_svg.axisdate.setTime(1000. * (plotcoord.x + 946684800));
+	hour = gnuplot_svg.axisdate.getUTCHours();
+	minute = gnuplot_svg.axisdate.getUTCMinutes();
+	second = gnuplot_svg.axisdate.getUTCSeconds();
+	label_x = ("0" + hour).slice (-2) + ":" 
+		+ ("0" + minute).slice (-2) + ":"
+		+ ("0" + second).slice (-2);
+	label_y = plotcoord.y.toFixed(2);
+    } else if (gnuplot_svg.plot_timeaxis_x == "DateTime") {
+	gnuplot_svg.axisdate.setTime(1000. * (plotcoord.x + 946684800));
+	label_x = gnuplot_svg.axisdate.toUTCString();
+	label_y = plotcoord.y.toFixed(2);
+    } else {
+	label_x = plotcoord.x.toFixed(2);
+	label_y = plotcoord.y.toFixed(2);
+    }
+
+    while (null != t.firstChild) {
+    	t.removeChild(t.firstChild);
+    }
+    var textNode = document.createTextNode(".  "+label_x+" "+label_y);
+    t.appendChild(textNode);
+}
+
+gnuplot_svg.showCoordBox = function(evt) {
+    var t = gnuplot_svg.getText();
+    if (null != t) {
+    	t.setAttribute("visibility", "visible");
+    	gnuplot_svg.updateCoordBox(t, evt);
+    }
+}
+
+gnuplot_svg.moveCoordBox = function(evt) {
+    var t = gnuplot_svg.getText();
+    if (null != t)
+    	gnuplot_svg.updateCoordBox(t, evt);
+}
+
+gnuplot_svg.hideCoordBox = function(evt) {
+    var t = gnuplot_svg.getText();
+    if (null != t)
+    	t.setAttribute("visibility", "hidden");
+}
+
+gnuplot_svg.toggleCoordBox = function(evt) {
+    var t = gnuplot_svg.getText();
+    if (null != t) {
+	state = t.getAttribute('visibility');
+	if ('hidden' != state)
+	    state = 'hidden';
+	else
+	    state = 'visible';
+	t.setAttribute('visibility', state);
+    }
+}
+
+gnuplot_svg.toggleGrid = function() {
+    if (!gnuplot_svg.SVGDoc.getElementsByClassName) // Old browsers
+	return;
+    var grid = gnuplot_svg.SVGDoc.getElementsByClassName('gridline');
+    for (var i=0; i<grid.length; i++) {
+	state = grid[i].getAttribute('visibility');
+	grid[i].setAttribute('visibility', (state == 'hidden') ? 'visible' : 'hidden');
+    }
+}
+
+// Convert from svg panel mouse coordinates to the coordinate
+// system of the gnuplot figure
+gnuplot_svg.mouse2plot = function(mousex,mousey) {
+    var plotcoord = new Object;
+    var plotx = mousex - gnuplot_svg.plot_xmin;
+    var ploty = mousey - gnuplot_svg.plot_ybot;
+
+    if (gnuplot_svg.plot_logaxis_x != 0) {
+	x = Math.log(gnuplot_svg.plot_axis_xmax)
+	  - Math.log(gnuplot_svg.plot_axis_xmin);
+	x = x * (plotx / (gnuplot_svg.plot_xmax - gnuplot_svg.plot_xmin))
+	  + Math.log(gnuplot_svg.plot_axis_xmin);
+	x = Math.exp(x);
+    } else {
+	x = gnuplot_svg.plot_axis_xmin + (plotx / (gnuplot_svg.plot_xmax-gnuplot_svg.plot_xmin)) * (gnuplot_svg.plot_axis_xmax - gnuplot_svg.plot_axis_xmin);
+    }
+
+    if (gnuplot_svg.plot_logaxis_y != 0) {
+	y = Math.log(gnuplot_svg.plot_axis_ymax)
+	  - Math.log(gnuplot_svg.plot_axis_ymin);
+	y = y * (ploty / (gnuplot_svg.plot_ytop - gnuplot_svg.plot_ybot))
+	  + Math.log(gnuplot_svg.plot_axis_ymin);
+	y = Math.exp(y);
+    } else {
+	y = gnuplot_svg.plot_axis_ymin + (ploty / (gnuplot_svg.plot_ytop-gnuplot_svg.plot_ybot)) * (gnuplot_svg.plot_axis_ymax - gnuplot_svg.plot_axis_ymin);
+    }
+
+    plotcoord.x = x;
+    plotcoord.y = y;
+    return plotcoord;
+}
+
+gnuplot_svg.convert_to_polar = function (x,y)
+{
+    polar = new Object;
+    var phi, r;
+    phi = Math.atan2(y,x);
+    if (gnuplot_svg.plot_logaxis_r) 
+        r = Math.exp( (x/Math.cos(phi) + Math.log(gnuplot_svg.plot_axis_rmin)/Math.LN10) * Math.LN10);
+    else
+        r = x/Math.cos(phi) + gnuplot_svg.plot_axis_rmin;
+    polar.ang = phi * 180./Math.PI;
+    polar.r = r;
+    return polar;
+}
+
+]]>
+</script>
+
+<!-- Tie mousing to entire bounding box of the plot -->
+<rect x="0" y="0" width="1024" height="560" fill="#ffffff" stroke="black" stroke-width="1"
+onclick="gnuplot_svg.toggleCoordBox(evt)"  onmousemove="gnuplot_svg.moveCoordBox(evt)"/>
+
+<!-- Also track mouse when it is on a plot element -->
+<g id="gnuplot_canvas" onclick="gnuplot_svg.toggleCoordBox(evt)" onmousemove="gnuplot_svg.moveCoordBox(evt)">
+
+<defs>
+
+	<circle id='gpDot' r='0.5' stroke-width='0.5'/>
+	<path id='gpPt0' stroke-width='0.222' stroke='currentColor' d='M-1,0 h2 M0,-1 v2'/>
+	<path id='gpPt1' stroke-width='0.222' stroke='currentColor' d='M-1,-1 L1,1 M1,-1 L-1,1'/>
+	<path id='gpPt2' stroke-width='0.222' stroke='currentColor' d='M-1,0 L1,0 M0,-1 L0,1 M-1,-1 L1,1 M-1,1 L1,-1'/>
+	<rect id='gpPt3' stroke-width='0.222' stroke='currentColor' x='-1' y='-1' width='2' height='2'/>
+	<rect id='gpPt4' stroke-width='0.222' stroke='currentColor' fill='currentColor' x='-1' y='-1' width='2' height='2'/>
+	<circle id='gpPt5' stroke-width='0.222' stroke='currentColor' cx='0' cy='0' r='1'/>
+	<use xlink:href='#gpPt5' id='gpPt6' fill='currentColor' stroke='none'/>
+	<path id='gpPt7' stroke-width='0.222' stroke='currentColor' d='M0,-1.33 L-1.33,0.67 L1.33,0.67 z'/>
+	<use xlink:href='#gpPt7' id='gpPt8' fill='currentColor' stroke='none'/>
+	<use xlink:href='#gpPt7' id='gpPt9' stroke='currentColor' transform='rotate(180)'/>
+	<use xlink:href='#gpPt9' id='gpPt10' fill='currentColor' stroke='none'/>
+	<use xlink:href='#gpPt3' id='gpPt11' stroke='currentColor' transform='rotate(45)'/>
+	<use xlink:href='#gpPt11' id='gpPt12' fill='currentColor' stroke='none'/>
+	<filter id='greybox' filterUnits='objectBoundingBox' x='0' y='0' height='1' width='1'>
+	  <feFlood flood-color='lightgrey' flood-opacity='1' result='grey'/>
+	  <feComposite in='SourceGraphic' in2='grey' operator='atop'/>
+	</filter>
+</defs>
+<g style="fill:none; color:white; stroke:currentColor; stroke-width:1.00; stroke-linecap:round; stroke-linejoin:round">
+</g>
+<g style="fill:none; color:black; stroke:currentColor; stroke-width:1.00; stroke-linecap:round; stroke-linejoin:round">
+	<path stroke='black'  d='M71.9,502.4 L80.9,502.4 M999.0,502.4 L990.0,502.4  '/>	<g transform="translate(63.6,506.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text> 0</text>
+	</g>
+	<path stroke='black'  d='M71.9,416.1 L80.9,416.1 M999.0,416.1 L990.0,416.1  '/>	<g transform="translate(63.6,420.6)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text> 0.5</text>
+	</g>
+	<path stroke='black'  d='M71.9,329.7 L80.9,329.7 M999.0,329.7 L990.0,329.7  '/>	<g transform="translate(63.6,334.2)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text> 1</text>
+	</g>
+	<path stroke='black'  d='M71.9,243.4 L80.9,243.4 M999.0,243.4 L990.0,243.4  '/>	<g transform="translate(63.6,247.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text> 1.5</text>
+	</g>
+	<path stroke='black'  d='M71.9,157.0 L80.9,157.0 M999.0,157.0 L990.0,157.0  '/>	<g transform="translate(63.6,161.5)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text> 2</text>
+	</g>
+	<path stroke='black'  d='M71.9,70.7 L80.9,70.7 M999.0,70.7 L990.0,70.7  '/>	<g transform="translate(63.6,75.2)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text> 2.5</text>
+	</g>
+	<path stroke='black'  d='M226.1,502.4 L226.1,493.4 M226.1,70.7 L226.1,79.7  '/>	<g transform="translate(226.1,524.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text> 20</text>
+	</g>
+	<path stroke='black'  d='M380.7,502.4 L380.7,493.4 M380.7,70.7 L380.7,79.7  '/>	<g transform="translate(380.7,524.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text> 40</text>
+	</g>
+	<path stroke='black'  d='M535.2,502.4 L535.2,493.4 M535.2,70.7 L535.2,79.7  '/>	<g transform="translate(535.2,524.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text> 60</text>
+	</g>
+	<path stroke='black'  d='M689.8,502.4 L689.8,493.4 M689.8,70.7 L689.8,79.7  '/>	<g transform="translate(689.8,524.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text> 80</text>
+	</g>
+	<path stroke='black'  d='M844.3,502.4 L844.3,493.4 M844.3,70.7 L844.3,79.7  '/>	<g transform="translate(844.3,524.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text> 100</text>
+	</g>
+	<path stroke='black'  d='M998.9,502.4 L998.9,493.4 M998.9,70.7 L998.9,79.7  '/>	<g transform="translate(998.9,524.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text> 120</text>
+	</g>
+	<path stroke='black'  d='M71.9,70.7 L71.9,502.4 L999.0,502.4 L999.0,70.7 L71.9,70.7 Z  '/>	<g transform="translate(17.6,286.6) rotate(270)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text>throughput (Mbits/s)</text>
+	</g>
+	<g transform="translate(535.4,551.9)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
+		<text>time (s)</text>
+	</g>
+</g>
+	<g id="Throughput_plot_1" ><title>Throughput_plot_1</title>
+<g style="fill:none; color:white; stroke:black; stroke-width:0.50; stroke-linecap:round; stroke-linejoin:round">
+</g>
+<g style="fill:none; color:red; stroke:currentColor; stroke-width:0.50; stroke-linecap:round; stroke-linejoin:round">
+	<g id="Throughput_plot_1_keyentry" visibility="visible" onclick="gnuplot_svg.toggleVisibility(evt,'Throughput_plot_1')">
+	<g transform="translate(476.6,22.5)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text>Capacity (mean 0.88 Mbits/s)</text>
+	</g>
+	<g style = 'stroke:none; shape-rendering:crispEdges'>
+		<polygon fill = 'currentColor' fill-opacity = '0.200000' points = '484.9,22.5 527.1,22.5 527.1,13.5 484.9,13.5 '/>
+	</g>
+	</g>
+	<g style = 'stroke:none; shape-rendering:crispEdges'>
+		<polygon fill = 'currentColor' fill-opacity = '0.200000' points = '71.9,502.4 75.4,502.4 79.3,452.5 83.2,415.1 87.0,282.2 90.9,248.9 94.8,215.7 98.6,307.1 102.5,286.3 106.3,278.0 110.2,315.4 114.1,311.3 117.9,319.6 121.8,381.9 125.7,332.0 129.5,336.2
+133.4,336.2 137.3,327.9 141.1,323.7 145.0,327.9 148.8,332.0 152.7,340.3 156.6,332.0 160.4,406.8 164.3,369.4 168.2,340.3 172.0,332.0 175.9,336.2 179.8,332.0 183.6,340.3 187.5,332.0 191.3,340.3
+195.2,340.3 199.1,365.3 202.9,402.7 206.8,327.9 210.7,332.0 214.5,336.2 218.4,336.2 222.3,336.2 226.1,336.2 230.0,340.3 233.8,332.0 237.7,344.5 241.6,402.7 245.4,340.3 249.3,336.2 253.2,336.2
+257.0,336.2 260.9,344.5 264.8,327.9 268.6,348.7 272.5,394.4 276.3,423.4 280.2,423.4 284.1,348.7 287.9,435.9 291.8,440.1 295.7,435.9 299.5,456.7 303.4,444.2 307.3,473.3 311.1,415.1 315.0,357.0
+318.9,419.3 322.7,327.9 326.6,311.3 330.4,377.7 334.3,381.9 338.2,444.2 342.0,373.6 345.9,369.4 349.8,394.4 353.6,381.9 357.5,386.0 361.4,423.4 365.2,327.9 369.1,361.1 372.9,332.0 376.8,357.0
+380.7,315.4 384.5,327.9 388.4,315.4 392.3,323.7 396.1,315.4 400.0,419.3 403.9,315.4 407.7,298.8 411.6,315.4 415.4,302.9 419.3,294.6 423.2,286.3 427.0,311.3 430.9,319.6 434.8,298.8 438.6,402.7
+442.5,307.1 446.4,307.1 450.2,323.7 454.1,327.9 457.9,319.6 461.8,327.9 465.7,327.9 469.5,332.0 473.4,332.0 477.3,402.7 481.1,373.6 485.0,315.4 488.9,315.4 492.7,319.6 496.6,319.6 500.4,332.0
+504.3,327.9 508.2,323.7 512.0,352.8 515.9,398.5 519.8,502.4 523.6,423.4 527.5,402.7 531.4,394.4 535.2,485.8 539.1,469.2 542.9,431.8 546.8,369.4 550.7,323.7 554.5,311.3 558.4,502.4 562.3,369.4
+566.1,311.3 570.0,373.6 573.9,411.0 577.7,323.7 581.6,307.1 585.5,286.3 589.3,323.7 593.2,323.7 597.0,377.7 600.9,311.3 604.8,315.4 608.6,323.7 612.5,315.4 616.4,319.6 620.2,332.0 624.1,307.1
+628.0,315.4 631.8,294.6 635.7,423.4 639.5,381.9 643.4,286.3 647.3,290.5 651.1,290.5 655.0,311.3 658.9,315.4 662.7,327.9 666.6,332.0 670.5,323.7 674.3,369.4 678.2,348.7 682.0,327.9 685.9,327.9
+689.8,340.3 693.6,311.3 697.5,327.9 701.4,323.7 705.2,327.9 709.1,327.9 713.0,348.7 716.8,402.7 720.7,448.4 724.5,332.0 728.4,253.1 732.3,323.7 736.1,315.4 740.0,340.3 743.9,336.2 747.7,357.0
+751.6,344.5 755.5,473.3 759.3,477.5 763.2,502.4 767.0,444.2 770.9,456.7 774.8,456.7 778.6,444.2 782.5,452.5 786.4,448.4 790.2,448.4 794.1,456.7 798.0,411.0 801.8,294.6 805.7,278.0 809.6,282.2
+813.4,298.8 817.3,269.7 821.1,290.5 825.0,294.6 828.9,302.9 832.7,361.1 836.6,302.9 840.5,302.9 844.3,319.6 848.2,273.9 852.1,269.7 855.9,290.5 859.8,294.6 863.6,315.4 867.5,319.6 871.4,336.2
+875.2,381.9 879.1,319.6 883.0,315.4 886.8,302.9 890.7,332.0 894.6,307.1 898.4,286.3 902.3,282.2 906.1,298.8 910.0,298.8 913.9,415.1 917.7,307.1 921.6,290.5 925.5,282.2 929.3,298.8 933.2,298.8
+937.1,294.6 940.9,302.9 944.8,340.3 948.6,307.1 952.5,390.2 956.4,298.8 960.2,273.9 964.1,290.5 968.0,269.7 971.8,340.3 975.7,481.6 979.6,452.5 983.4,419.3 987.3,448.4 991.1,473.3 995.0,448.4
+998.9,498.2 998.9,502.4 71.9,502.4 '/>
+	</g>
+</g>
+	</g>
+	<g id="Throughput_plot_2" ><title>Throughput_plot_2</title>
+<g style="fill:none; color:white; stroke:currentColor; stroke-width:4.00; stroke-linecap:round; stroke-linejoin:round">
+</g>
+<g style="fill:none; color:green; stroke:currentColor; stroke-width:4.00; stroke-linecap:round; stroke-linejoin:round">
+	<g id="Throughput_plot_2_keyentry" visibility="visible" onclick="gnuplot_svg.toggleVisibility(evt,'Throughput_plot_2')">
+	<g transform="translate(476.6,40.5)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text>Traffic ingress (mean 0.87 Mbits/s)</text>
+	</g>
+	<path stroke='rgb(  0,  32, 160)'  d='M484.9,36.0 L527.1,36.0  '/>	</g>
+	<path stroke='rgb(  0,  32, 160)'  d='M71.9,501.5 L75.4,502.4 L79.3,449.2 L83.2,322.2 L87.0,84.8 L90.9,84.8 L94.8,502.4 L98.6,367.3 
+		L102.5,195.2 L106.3,256.7 L110.2,469.6 L114.1,314.0 L117.9,240.3 L121.8,359.1 L125.7,449.2 L129.5,318.1 
+		L133.4,273.0 L137.3,297.7 L141.1,428.7 L145.0,310.0 L148.8,273.1 L152.7,301.8 L156.6,432.8 L160.4,387.8 
+		L164.3,408.2 L168.2,273.1 L172.0,260.8 L175.9,424.6 L179.8,387.8 L183.6,277.2 L187.5,269.0 L191.3,404.1 
+		L195.2,404.1 L199.1,289.5 L202.9,436.9 L206.8,367.3 L210.7,273.1 L214.5,269.0 L218.4,395.9 L222.3,412.3 
+		L226.1,260.8 L230.0,273.1 L233.8,416.4 L237.7,391.8 L241.6,330.4 L245.4,346.8 L249.3,314.0 L253.2,404.1 
+		L257.0,334.5 L260.9,269.0 L264.8,314.0 L268.6,441.0 L272.5,408.2 L276.3,400.0 L280.2,486.0 L284.1,453.3 
+		L287.9,359.1 L291.8,498.3 L295.7,473.7 L299.5,408.2 L303.4,473.7 L307.3,498.3 L311.1,457.4 L315.0,305.9 
+		L318.9,314.0 L322.7,432.8 L326.6,297.7 L330.4,256.7 L334.3,453.3 L338.2,457.4 L342.0,502.4 L345.9,432.8 
+		L349.8,326.3 L353.6,416.4 L357.5,359.1 L361.4,481.9 L365.2,310.0 L369.1,301.8 L372.9,314.0 L376.8,453.3 
+		L380.7,256.7 L384.5,285.4 L388.4,387.8 L392.3,285.4 L396.1,277.2 L400.0,494.2 L403.9,305.9 L407.7,256.7 
+		L411.6,301.8 L415.4,355.0 L419.3,228.1 L423.2,301.8 L427.0,391.8 L430.9,264.9 L434.8,260.8 L438.6,441.0 
+		L442.5,359.1 L446.4,260.8 L450.2,310.0 L454.1,395.9 L457.9,277.2 L461.8,285.4 L465.7,408.2 L469.5,281.3 
+		L473.4,310.0 L477.3,432.8 L481.1,486.0 L485.0,326.3 L488.9,273.1 L492.7,285.4 L496.6,379.6 L500.4,281.3 
+		L504.3,355.0 L508.2,301.8 L512.0,371.4 L515.9,416.4 L519.8,498.3 L523.6,481.9 L527.5,355.0 L531.4,350.9 
+		L535.2,502.4 L539.1,502.4 L542.9,490.1 L546.8,391.8 L550.7,281.3 L554.5,252.6 L558.4,432.8 L562.3,490.1 
+		L566.1,301.8 L570.0,305.9 L573.9,465.5 L577.7,346.8 L581.6,260.8 L585.5,232.2 L589.3,379.6 L593.2,400.0 
+		L597.0,330.4 L600.9,281.3 L604.8,269.0 L608.6,395.9 L612.5,281.3 L616.4,314.0 L620.2,375.5 L624.1,273.1 
+		L628.0,281.3 L631.8,359.1 L635.7,338.6 L639.5,477.8 L643.4,269.0 L647.3,240.3 L651.1,305.9 L655.0,367.3 
+		L658.9,264.9 L662.7,310.0 L666.6,408.2 L670.5,293.6 L674.3,301.8 L678.2,408.2 L682.0,350.9 L685.9,293.6 
+		L689.8,322.2 L693.6,379.6 L697.5,269.0 L701.4,342.7 L705.2,346.8 L709.1,277.2 L713.0,387.8 L716.8,494.2 
+		L720.7,420.5 L724.5,445.1 L728.4,228.1 L732.3,281.3 L736.1,273.1 L740.0,408.2 L743.9,285.4 L747.7,359.1 
+		L751.6,395.9 L755.5,424.6 L759.3,502.4 L763.2,502.4 L767.0,502.4 L770.9,481.9 L774.8,445.1 L778.6,371.4 
+		L782.5,445.1 L786.4,502.4 L790.2,502.4 L794.1,481.9 L798.0,461.5 L801.8,248.5 L805.7,199.4 L809.6,301.8 
+		L813.4,408.2 L817.3,187.1 L821.1,248.5 L825.0,322.2 L828.9,346.8 L832.7,281.3 L836.6,371.4 L840.5,256.7 
+		L844.3,379.6 L848.2,252.6 L852.1,232.2 L855.9,277.2 L859.8,371.4 L863.6,256.7 L867.5,363.2 L871.4,301.8 
+		L875.2,412.3 L879.1,322.2 L883.0,260.8 L886.8,346.8 L890.7,322.2 L894.6,264.9 L898.4,363.2 L902.3,228.1 
+		L906.1,314.0 L910.0,314.0 L913.9,408.2 L917.7,338.6 L921.6,244.4 L925.5,293.6 L929.3,285.4 L933.2,293.6 
+		L937.1,334.5 L940.9,244.4 L944.8,412.3 L948.6,301.8 L952.5,326.3 L956.4,359.1 L960.2,232.2 L964.1,277.2 
+		L968.0,293.6 L971.8,301.8 L975.7,502.4 L979.6,502.4 L983.4,494.2 L987.3,400.0 L991.1,445.1 L995.0,502.4 
+		L998.9,502.4  '/></g>
+	</g>
+	<g id="Throughput_plot_3" ><title>Throughput_plot_3</title>
+<g style="fill:none; color:white; stroke:rgb(  0,  32, 160); stroke-width:2.00; stroke-linecap:round; stroke-linejoin:round">
+</g>
+<g style="fill:none; color:blue; stroke:currentColor; stroke-width:2.00; stroke-linecap:round; stroke-linejoin:round">
+	<g id="Throughput_plot_3_keyentry" visibility="visible" onclick="gnuplot_svg.toggleVisibility(evt,'Throughput_plot_3')">
+	<g transform="translate(825.9,22.5)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
+		<text>Traffic egress (mean 0.87 Mbits/s)</text>
+	</g>
+	<path stroke='rgb(255,  96,  64)'  d='M834.2,18.0 L876.4,18.0  '/>	</g>
+	<path stroke='rgb(255,  96,  64)'  d='M71.9,502.4 L75.4,502.4 L79.3,464.5 L83.2,416.4 L87.0,281.3 L90.9,248.5 L94.8,215.8 L98.6,310.0 
+		L102.5,285.2 L106.3,277.2 L110.2,314.0 L114.1,314.0 L117.9,318.1 L121.8,383.7 L125.7,330.4 L129.5,338.6 
+		L133.4,334.5 L137.3,326.2 L141.1,326.3 L145.0,326.3 L148.8,330.4 L152.7,342.7 L156.6,330.4 L160.4,408.2 
+		L164.3,367.3 L168.2,342.7 L172.0,330.4 L175.9,338.6 L179.8,330.4 L183.6,338.6 L187.5,334.5 L191.3,338.6 
+		L195.2,342.7 L199.1,363.2 L202.9,404.1 L206.8,326.3 L210.7,334.5 L214.5,334.5 L218.4,334.5 L222.3,338.6 
+		L226.1,334.5 L230.0,342.7 L233.8,330.4 L237.7,346.8 L241.6,400.0 L245.4,342.7 L249.3,334.5 L253.2,334.5 
+		L257.0,338.6 L260.9,342.7 L264.8,330.4 L268.6,346.8 L272.5,395.9 L276.3,420.5 L280.2,424.6 L284.1,428.7 
+		L287.9,436.9 L291.8,441.0 L295.7,449.2 L299.5,461.5 L303.4,445.1 L307.3,473.7 L311.1,461.5 L315.0,371.4 
+		L318.9,420.5 L322.7,326.3 L326.6,314.0 L330.4,375.5 L334.3,383.7 L338.2,441.0 L342.0,383.7 L345.9,436.9 
+		L349.8,395.9 L353.6,383.7 L357.5,387.8 L361.4,424.6 L365.2,342.7 L369.1,363.2 L372.9,330.4 L376.8,359.1 
+		L380.7,314.0 L384.5,326.3 L388.4,318.1 L392.3,322.2 L396.1,314.0 L400.0,420.5 L403.9,314.0 L407.7,301.8 
+		L411.6,314.0 L415.4,301.8 L419.3,293.6 L423.2,289.5 L427.0,310.0 L430.9,318.1 L434.8,301.8 L438.6,400.0 
+		L442.5,310.0 L446.4,305.9 L450.2,322.2 L454.1,330.4 L457.9,318.1 L461.8,326.3 L465.7,330.4 L469.5,330.4 
+		L473.4,330.4 L477.3,404.1 L481.1,404.1 L485.0,355.0 L488.9,318.1 L492.7,318.1 L496.6,318.1 L500.4,334.5 
+		L504.3,326.3 L508.2,322.2 L512.0,355.0 L515.9,395.9 L519.8,502.4 L523.6,428.7 L527.5,408.2 L531.4,395.9 
+		L535.2,486.0 L539.1,469.6 L542.9,445.1 L546.8,391.8 L550.7,326.3 L554.5,310.0 L558.4,502.4 L562.3,367.3 
+		L566.1,314.0 L570.0,371.4 L573.9,412.3 L577.7,322.2 L581.6,310.0 L585.5,285.4 L589.3,322.2 L593.2,326.3 
+		L597.0,375.5 L600.9,310.0 L604.8,318.1 L608.6,322.2 L612.5,314.0 L616.4,322.2 L620.2,330.4 L624.1,310.0 
+		L628.0,314.0 L631.8,293.6 L635.7,424.6 L639.5,379.6 L643.4,289.5 L647.3,289.5 L651.1,289.5 L655.0,310.0 
+		L658.9,318.1 L662.7,326.3 L666.6,334.5 L670.5,322.2 L674.3,367.3 L678.2,350.9 L682.0,326.3 L685.9,330.4 
+		L689.8,338.6 L693.6,310.0 L697.5,330.4 L701.4,322.2 L705.2,326.3 L709.1,330.4 L713.0,346.8 L716.8,412.3 
+		L720.7,457.4 L724.5,408.2 L728.4,252.6 L732.3,326.3 L736.1,314.0 L740.0,342.7 L743.9,334.5 L747.7,355.0 
+		L751.6,346.8 L755.5,473.7 L759.3,477.8 L763.2,502.4 L767.0,445.1 L770.9,473.7 L774.8,469.6 L778.6,445.1 
+		L782.5,453.3 L786.4,449.2 L790.2,449.2 L794.1,481.9 L798.0,465.5 L801.8,301.8 L805.7,277.2 L809.6,281.3 
+		L813.4,301.8 L817.3,269.0 L821.1,289.5 L825.0,293.6 L828.9,305.9 L832.7,359.1 L836.6,301.8 L840.5,305.9 
+		L844.3,318.1 L848.2,273.1 L852.1,269.0 L855.9,293.6 L859.8,293.6 L863.6,314.0 L867.5,318.1 L871.4,338.6 
+		L875.2,379.6 L879.1,322.2 L883.0,314.0 L886.8,301.8 L890.7,334.5 L894.6,305.9 L898.4,285.4 L902.3,285.4 
+		L906.1,297.7 L910.0,297.7 L913.9,416.4 L917.7,305.9 L921.6,289.5 L925.5,285.4 L929.3,297.7 L933.2,297.7 
+		L937.1,293.6 L940.9,305.9 L944.8,338.6 L948.6,305.9 L952.5,391.8 L956.4,297.7 L960.2,273.1 L964.1,293.6 
+		L968.0,269.0 L971.8,338.6 L975.7,481.9 L979.6,453.3 L983.4,428.7 L987.3,453.3 L991.1,473.7 L995.0,449.2 
+		L998.9,498.3  '/></g>
+	</g>
+<g style="fill:none; color:white; stroke:rgb(255,  96,  64); stroke-width:1.00; stroke-linecap:round; stroke-linejoin:round">
+</g>
+<g style="fill:none; color:black; stroke:currentColor; stroke-width:1.00; stroke-linecap:round; stroke-linejoin:round">
+	<path stroke='black'  d='M71.9,70.7 L71.9,502.4 L999.0,502.4 L999.0,70.7 L71.9,70.7 Z  '/></g>
+
+<script type="text/javascript"><![CDATA[
+// plot boundaries and axis scaling information for mousing 
+gnuplot_svg.plot_term_xmax = 1024;
+gnuplot_svg.plot_term_ymax = 560;
+gnuplot_svg.plot_xmin = 71.9;
+gnuplot_svg.plot_xmax = 999.0;
+gnuplot_svg.plot_ybot = 502.4;
+gnuplot_svg.plot_ytop = 70.7;
+gnuplot_svg.plot_width = 927.1;
+gnuplot_svg.plot_height = 431.7;
+gnuplot_svg.plot_axis_xmin = 0.043;
+gnuplot_svg.plot_axis_xmax = 120.016;
+gnuplot_svg.plot_axis_ymin = 0;
+gnuplot_svg.plot_axis_ymax = 2.5;
+gnuplot_svg.polar_mode = false;
+gnuplot_svg.plot_axis_x2min = "none"
+gnuplot_svg.plot_axis_y2min = "none"
+gnuplot_svg.plot_logaxis_x = 0;
+gnuplot_svg.plot_logaxis_y = 0;
+gnuplot_svg.plot_timeaxis_x = "";
+]]>
+</script>
+</g>
+
+  <text id="coord_text" text-anchor="start" pointer-events="none"
+  font-size="12" font-family="Arial"
+  visibility="hidden"> </text>
+</svg>
+
